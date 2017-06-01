@@ -10,6 +10,11 @@
 #define KEY_RIGHT 77 + 256
 #define KEY_LEFT 75 + 256
 #define ENTER 13
+#define NEGRO 0
+#define AZUL 1
+#define VERDE 2
+#define ROJO 4
+#define MAGENTA 5
 
 using namespace std;
 
@@ -224,5 +229,155 @@ void dibujar_marco_ingreso_datos(){
 	cout<<"Fecha Actual: "<<fecha();
 }
 
+string generar_id(string anio, int &id_, string nombre, bool jefe){
+
+	string id;
+	int e = 0;
+
+	if(jefe){
+		for(int i = 0; i < nombre.size(); i++){
+
+			if(nombre[i] == ' '){
+				e++;
+				if(e == 2 || e == 3){
+					id = id + nombre[i+1];
+				}
+			}
+
+		}
+	}
+	else{
+		id = id + nombre[0];
+	}
+
+	id = id + anio;
+	string digitos;
+
+	if(id_ < 10){
+		digitos = "00" + ConvertirNumero(id_);
+	}
+	else if( id_ < 100){
+		digitos = "0" + ConvertirNumero(id_);
+	}
+	else{
+		digitos = ConvertirNumero(id_);
+	}
+
+	id = id + digitos;
+
+	id_++;
+
+	for(int i = 0; i < id.size(); i++){
+		id.at(i) = toupper(id.at(i));
+	}
+
+	return id;
+
+}
+
+void marco_ingreso(int x, int y, int ancho, int lineas, string texto[], string titulo, int color) {
+
+    setColorText(color);
+
+    lineas*=2;
+    lineas+=4;
+
+    //barras horizontales
+	for (int i = x; i <= x+ancho; i++) {
+
+		if (i == x) {
+			gotoxy(i, y);
+			printf("%c", 201);
+			gotoxy(i, y+lineas);
+			printf("%c", 200);
+		} else if (i == ancho+x) {
+			gotoxy(i, y);
+			printf("%c", 187);
+			gotoxy(i, y+lineas);
+			printf("%c", 188);
+		}
+        else{
+            gotoxy(i, y);
+            printf("%c", 205);
+            gotoxy(i, y+lineas);
+            printf("%c", 205);
+        }
+
+	}
 
 
+    for(int e = y+4; e<= y+lineas-2; e+=2){
+
+        for(int i = x; i <= x+ancho; i++){
+
+            if(e == y+4){
+                gotoxy(i, e);
+                printf("%c", 196);
+            }
+
+            gotoxy(i, e);
+            printf("%c", 196);
+
+        }
+
+    }
+
+    gotoxy(((x+ancho)/3), y+2);
+    cout << titulo;
+
+    int text = 0;
+    for (int i = y+5; i < y+lineas ; i+=2) {
+        gotoxy(x+2, i);
+        cout << texto[text];
+        text++;
+    }
+
+    //barras verticales
+	for (int i = y+1; i <= y+lineas-1; i++) {
+		gotoxy(x, i);
+		printf("%c", 186);
+		gotoxy(x+ancho, i);
+		printf("%c", 186);
+
+		if (i >= y+5) {
+			gotoxy(((x+ancho)/3), i);
+			printf("%c", 179);
+		}
+	}
+
+}
+
+void recuadro_nota(){
+	//cuadro de nota
+
+	for (int i = 14; i <= 85; i++) {
+
+		if (i == 14) {
+			gotoxy(i, 34);
+			printf("%c", 201);
+			gotoxy(i, 38);
+			printf("%c", 200);
+		} else if (i == 85) {
+			gotoxy(i, 34);
+			printf("%c", 187);
+			gotoxy(i, 38);
+			printf("%c", 188);
+		} else {
+
+			gotoxy(i, 34);
+			printf("%c", 205);
+			gotoxy(i, 38);
+			printf("%c", 205);
+		}
+
+	}
+
+	for (int i = 35; i <= 37; i++) {
+
+		gotoxy(14, i);
+		printf("%c", 186);
+		gotoxy(85, i);
+		printf("%c", 186);
+
+	}
+}
